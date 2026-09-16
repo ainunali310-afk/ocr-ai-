@@ -1,0 +1,37 @@
+# Environment & Secrets
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Uploaded files
+uploads/*
+!uploads/.gitkeep
+
+# Cache
+cache/*
+!cache/.gitkeep
+
+# Logs
+logs/*
+!logs/.gitkeep
+
+# Database dumps (keep schema only)
+*.sql
+!arsip_digital.sql
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# OS files
+Desktop.ini
+.DS_Store
+
+# XAMPP
+.xampp
