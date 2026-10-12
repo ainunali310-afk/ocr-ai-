@@ -1,0 +1,70 @@
+# 1.1 Latar Belakang (v2)
+
+> Draf revisi latar belakang mengikuti struktur 8 paragraf. Paragraf 8 memakai **Opsi A (grounding ringan)** karena sesuai dengan sistem yang sudah dibangun saat ini (`ai_search.php`: Gemini hanya menafsirkan kueri, hasil selalu diambil dari basis data). Varian kalimat untuk Opsi B tersedia di Bagian 4.
+
+---
+
+## Bagian 1 – Teks Latar Belakang
+
+Transformasi digital telah mengubah cara instansi pemerintah, organisasi, dan lembaga pendidikan menjalankan kegiatan administrasinya. Di lingkungan pemerintahan, arah perubahan tersebut ditegaskan melalui Peraturan Presiden Nomor 95 Tahun 2018 tentang Sistem Pemerintahan Berbasis Elektronik (SPBE), yang mendorong penyelenggaraan pemerintahan secara terpadu dengan memanfaatkan teknologi informasi dan komunikasi. Seiring meluasnya layanan elektronik serta kegiatan alih media arsip kertas ke bentuk digital, volume dokumen digital yang dihasilkan setiap instansi terus bertambah [PERLU SITASI: pertumbuhan volume dokumen/arsip digital di instansi]. Dokumen tersebut bukan sekadar berkas pendukung, melainkan arsip yang berfungsi sebagai bukti otentik pelaksanaan kegiatan, bahan pengambilan keputusan, dan sumber informasi historis. Undang-Undang Nomor 43 Tahun 2009 tentang Kearsipan mewajibkan penyelenggaraan kearsipan dilakukan secara sistematis agar arsip yang autentik dan terpercaya tersedia serta dapat diakses ketika dibutuhkan. Dengan demikian, pertumbuhan arsip digital menuntut pengelolaan yang tidak hanya menyimpan, tetapi juga menjamin arsip dapat ditemukan kembali secara cepat dan tepat.
+
+Digitalisasi tidak dengan sendirinya membuat arsip terkelola dengan baik. Pada awalnya, keterbatasan arsip fisik yang memerlukan ruang simpan, rentan rusak, dan lama dicari mendorong instansi melakukan pemindaian dokumen. Namun, hasil pemindaian kerap hanya dipindahkan ke folder komputer atau layanan penyimpanan daring tanpa struktur klasifikasi yang jelas. Penamaan berkas tidak seragam antarpetugas, misalnya "scan_001.jpg", "undangan fix.png", atau nama bawaan perangkat pemindai, sehingga isi berkas tidak dapat dikenali dari namanya. Berkas yang sama juga sering tersimpan berulang kali di lokasi berbeda sehingga menimbulkan duplikasi dan keraguan mengenai versi yang sah. Akibatnya, petugas tetap harus membuka berkas satu per satu untuk menemukan dokumen tertentu, dan permintaan arsip dari divisi lain tidak dapat dilayani dengan segera. Kondisi ini menunjukkan bahwa persoalan arsip digital tidak hanya terletak pada media penyimpanannya, tetapi juga pada bentuk data yang dihasilkan.
+
+Sebagian besar arsip hasil alih media berbentuk citra digital seperti JPG dan PNG, yang tergolong data tidak terstruktur (*unstructured data*), yaitu data yang tidak memiliki skema baku sehingga tidak dapat langsung diolah oleh sistem basis data [PERLU SITASI: definisi data tidak terstruktur]. Bagi komputer, citra hasil pindai hanyalah susunan piksel; teks yang terbaca jelas oleh manusia tidak dapat dibaca, diindeks, maupun dicari oleh sistem. Informasi penting seperti nomor surat, nama instansi pengirim, tanggal, dan perihal akhirnya terkunci di dalam gambar. Pencarian hanya dapat mengandalkan nama berkas atau keterangan yang diketik ulang oleh petugas. Selama isi dokumen belum diubah menjadi data yang dapat dibaca mesin, arsip digital pada praktiknya tidak lebih mudah ditemukan daripada arsip kertas. Untuk menjembatani hal tersebut, instansi umumnya bergantung pada metadata yang diisi secara manual.
+
+Metadata, yaitu data yang mendeskripsikan arsip seperti judul, tahun, nomor dokumen, jenis arsip, dan instansi pencipta, merupakan kunci dalam proses temu kembali arsip [PERLU SITASI: peran metadata dalam temu kembali arsip]. Melalui metadata, arsip dapat dikelompokkan, disaring, dan ditemukan tanpa harus membuka isinya satu per satu. Namun, pengisian metadata secara manual membutuhkan waktu yang lama, terutama ketika jumlah arsip yang dialihmediakan besar. Proses ini juga rawan salah ketik, tidak konsisten antarpetugas dalam menuliskan nama instansi atau jenis arsip, dan menambah beban kerja di luar tugas pokok petugas. Kualitas metadata yang buruk berdampak langsung pada kualitas pencarian, karena arsip dengan tahun yang keliru atau nama instansi yang ditulis berbeda tidak akan muncul ketika dicari. Oleh karena itu, diperlukan mekanisme yang membantu petugas mengekstrak metadata secara otomatis dan konsisten dari isi dokumen. Meskipun demikian, metadata yang baik pun belum menjamin arsip mudah ditemukan apabila cara pencariannya masih terbatas.
+
+Pendekatan pencarian konvensional berbasis pencocokan kata kunci (*keyword search*) memiliki keterbatasan mendasar karena hanya menemukan dokumen yang memuat istilah yang persis sama dengan kueri pengguna [PERLU SITASI: keterbatasan pencocokan kata kunci/lexical matching]. Pencarian semacam ini tidak memahami sinonim, misalnya "undangan" dan "surat permohonan kehadiran", maupun singkatan seperti "Disdik" untuk "Dinas Pendidikan". Pencarian kata kunci juga tidak mampu menafsirkan ungkapan waktu relatif seperti "tahun lalu" atau "bulan kemarin" menjadi rentang tanggal yang konkret. Padahal, kebutuhan nyata pengguna umumnya berbentuk kalimat sehari-hari, misalnya "cari surat undangan seminar tahun lalu dari dinas pendidikan". Jika kueri tersebut dicocokkan kata demi kata, dokumen yang relevan dapat terlewat, sedangkan dokumen yang tidak relevan justru ikut muncul. Akibatnya, pengguna dari divisi lain harus menebak istilah yang tepat atau kembali meminta bantuan petugas arsip. Keterbatasan pada sisi hulu (ekstraksi metadata) dan sisi hilir (pencarian) inilah yang mendorong pemanfaatan teknologi pemrosesan dokumen dan pencarian yang lebih cerdas.
+
+*Intelligent Document Processing* (IDP) merupakan pendekatan pengolahan dokumen yang memadukan *Optical Character Recognition* (OCR), pemahaman bahasa alami, dan ekstraksi informasi terstruktur dalam satu alur kerja. Kajian *Document AI* menunjukkan bahwa model yang memahami teks sekaligus tata letak dokumen mampu mengekstrak informasi dari dokumen pindaian secara otomatis (Cui dkk., 2021). Pada tingkat dasar, Tesseract OCR dapat mengubah citra dokumen menjadi teks mentah yang dapat diproses secara digital (Smith, 2007). Lebih jauh, *Vision Language Model* (VLM) seperti Google Gemini mampu membaca citra secara langsung, memahami tata letak dan konteks dokumen, serta mengenali jenis arsip beserta atribut pentingnya [PERLU SITASI: Gemini/VLM untuk pemahaman dokumen]. Dengan IDP, informasi yang sebelumnya terkunci di dalam citra dapat diubah menjadi metadata terstruktur sekaligus mengurangi beban pengisian manual. Namun, ketergantungan pada satu mesin pemroses menimbulkan risiko proses terhenti ketika layanan AI tidak tersedia, kuota habis, atau citra berkualitas rendah. Oleh karena itu, alur IDP perlu dilengkapi mekanisme *fallback* bertingkat, yaitu rangkaian cara cadangan yang dijalankan berurutan agar metadata tetap dihasilkan meskipun salah satu mesin gagal.
+
+Di sisi pencarian, pencarian semantik (*semantic search*) menawarkan cara menemukan dokumen berdasarkan makna kueri, bukan sekadar kecocokan deretan karakter. Landasan konsep ini adalah kemiripan semantik, yaitu gagasan bahwa dua kalimat dengan susunan kata berbeda dapat memiliki arti yang sama dan dapat diukur kedekatannya, misalnya melalui representasi vektor (*embedding*) kalimat (Reimers & Gurevych, 2019). Kemampuan model bahasa untuk menangkap makna tersebut berakar pada arsitektur *Transformer* (Vaswani dkk., 2017). Penelitian ini tidak membangun indeks vektor, tetapi memanfaatkan *Generative AI* untuk menerjemahkan kueri bahasa alami menjadi kriteria pencarian terstruktur atas metadata dan teks arsip, seperti tahun, jenis arsip, instansi, dan kata kunci isi. Dengan cara ini, kueri "tahun lalu dari dinas pendidikan" dapat diterjemahkan menjadi tahun tertentu dan instansi yang dimaksud. Apabila layanan AI tidak tersedia atau penafsirannya tidak menemukan hasil, sistem kembali menggunakan pencarian kata kunci sebagai cadangan. Pendekatan ini menjawab keterbatasan pencarian kata kunci tanpa menghilangkan keandalannya.
+
+Perkembangan *Large Language Model* (LLM) dan *Generative AI* dalam beberapa tahun terakhir membuka peluang pemanfaatan model bahasa untuk berbagai tugas pengolahan informasi. Namun, model generatif berisiko mengalami halusinasi, yaitu menghasilkan keluaran yang tampak meyakinkan tetapi tidak sesuai dengan fakta, terutama ketika model menjawab hanya dari pengetahuan internalnya [PERLU SITASI: halusinasi pada LLM]. *Retrieval-Augmented Generation* (RAG) diusulkan untuk mengurangi risiko tersebut dengan menambatkan keluaran model pada dokumen yang diambil dari sumber data nyata (Lewis dkk., 2020). Penelitian ini mengadopsi prinsip penambatan (*grounding*) tersebut secara ringan: Gemini hanya digunakan untuk memahami kueri dan mengekstrak metadata, sedangkan hasil pencarian selalu diambil dari basis data arsip sehingga sistem tidak pernah mengarang dokumen, dan verifikasi akhir metadata tetap berada di tangan petugas arsip. Meskipun IDP dan pencarian semantik telah banyak diteliti secara terpisah, integrasi keduanya dalam satu platform pengarsipan digital berbasis web yang dilengkapi mekanisme *fallback* bertingkat masih jarang diimplementasikan [PERLU SITASI: penelitian terdahulu IDP/OCR arsip dan pencarian semantik]. Oleh karena itu, penelitian ini mengembangkan platform pengarsipan digital yang memadukan *Intelligent Document Processing* berbasis Tesseract OCR dan Google Gemini Vision API dengan *fallback* bertingkat untuk ekstraksi metadata, serta pencarian semantik berbasis *Generative AI* untuk temu kembali arsip, sehingga arsip digital dapat dikelola secara lebih cepat, konsisten, dan mudah ditemukan kembali.
+
+---
+
+## Bagian 2 – Tabel Cek
+
+| Paragraf | Kalimat utama | Sitasi yang dipakai | RM yang didukung |
+|---|---|---|---|
+| 1. Transformasi digital | Transformasi digital telah mengubah cara instansi … menjalankan kegiatan administrasinya. | Perpres No. 95 Tahun 2018; UU No. 43 Tahun 2009; [PERLU SITASI #1] | Konteks umum (RM4) |
+| 2. Masalah arsip digital | Digitalisasi tidak dengan sendirinya membuat arsip terkelola dengan baik. | — (pernyataan kualitatif; dapat diperkuat hasil wawancara petugas arsip) | RM4 |
+| 3. Dokumen tidak terstruktur | Sebagian besar arsip hasil alih media berbentuk citra digital … data tidak terstruktur. | [PERLU SITASI #2] | RM1 |
+| 4. Metadata manual | Metadata … merupakan kunci dalam proses temu kembali arsip. | [PERLU SITASI #3] | RM1, RM4 |
+| 5. Keterbatasan keyword search | Pendekatan pencarian konvensional berbasis pencocokan kata kunci memiliki keterbatasan mendasar … | [PERLU SITASI #4] | RM3, RM4 |
+| 6. IDP sebagai solusi | *Intelligent Document Processing* (IDP) merupakan pendekatan … | Cui dkk. (2021); Smith (2007); [PERLU SITASI #5] | RM1, RM2 |
+| 7. Semantic search | Pencarian semantik menawarkan cara menemukan dokumen berdasarkan makna … | Reimers & Gurevych (2019); Vaswani dkk. (2017) | RM3 |
+| 8. Generative AI & RAG | Perkembangan LLM dan *Generative AI* … membuka peluang … | Lewis dkk. (2020); [PERLU SITASI #6, #7] | RM1–RM4 (celah penelitian + tujuan) |
+
+Akar masalah tiap RM:
+- **RM1** (alur IDP) ← paragraf 3 (isi terkunci di citra) dan 4 (metadata manual), dijawab paragraf 6.
+- **RM2** (fallback) ← paragraf 6 (risiko satu mesin gagal) dan celah penelitian paragraf 8.
+- **RM3** (pencarian semantik) ← paragraf 5, dijawab paragraf 7.
+- **RM4** (dibanding manual) ← paragraf 2, 4, dan 5 (lambat, rawan salah, sulit dicari).
+
+---
+
+## Bagian 3 – Daftar [PERLU SITASI] dan Kata Kunci Pencarian
+
+| # | Topik | Kata kunci (Google Scholar / Garuda / SINTA) |
+|---|---|---|
+| 1 | Pertumbuhan volume dokumen/arsip digital di instansi | "pertumbuhan arsip elektronik instansi pemerintah"; "alih media arsip digitalisasi SPBE"; "digital records growth public sector"; laporan ANRI tentang arsip elektronik |
+| 2 | Definisi data tidak terstruktur | "unstructured data definition document images"; "data tidak terstruktur dokumen pindaian"; buku teks basis data / *big data* |
+| 3 | Peran metadata dalam temu kembali arsip | "metadata arsip temu kembali informasi"; "records metadata retrieval ISO 23081"; "metadata kearsipan sistem informasi arsip" (Garuda) |
+| 4 | Keterbatasan pencocokan kata kunci | "vocabulary mismatch problem information retrieval"; "lexical matching limitation semantic search"; Manning, Raghavan & Schütze, *Introduction to Information Retrieval* |
+| 5 | Gemini/VLM untuk pemahaman dokumen | "Gemini multimodal model technical report"; "vision language model document understanding 2024"; "large multimodal model information extraction scanned documents" |
+| 6 | Halusinasi pada LLM | "survey of hallucination in natural language generation"; "hallucination large language models survey 2023" |
+| 7 | Penelitian terdahulu (celah penelitian) | "OCR arsip digital metadata otomatis"; "sistem informasi arsip OCR Tesseract"; "pencarian semantik arsip"; "intelligent document processing archive"; "LLM metadata extraction archival records" |
+
+Catatan: sumber yang sudah terverifikasi ada dan dipakai di teks — UU No. 43/2009, Perpres No. 95/2018, Smith (2007), Cui dkk. (2021), Vaswani dkk. (2017), Reimers & Gurevych (2019), Lewis dkk. (2020). Kandidat sumber untuk #4, #5, #6 di atas perlu dibaca dan dicek dulu sebelum dimasukkan ke daftar pustaka.
+
+---
+
+## Bagian 4 – Varian Paragraf 8 untuk Opsi B (RAG ringan)
+
+Jika dosbing memilih Opsi B, ganti kalimat keempat paragraf 8 dengan:
+
+> Penelitian ini menerapkan RAG secara ringan: beberapa arsip teratas hasil pencarian terstruktur dikirim sebagai konteks kepada Gemini untuk menghasilkan ringkasan jawaban yang selalu menyebutkan arsip sumbernya, tanpa membangun indeks vektor, sementara verifikasi akhir metadata tetap berada di tangan petugas arsip.
+
+Konsekuensi Opsi B: perlu fitur baru di sistem (saat ini `ai_search.php` belum mengirim hasil pencarian kembali ke Gemini) dan tambahan batasan masalah di Bab I.
